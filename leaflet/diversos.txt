@@ -1,0 +1,56 @@
+inputs - ui.R  
+
+textInput(inputId = "textInput", label="Enter a text", value="Default Text", placeholder="Placeholder"),
+numericInput(inputId = "numeric", label="Enter a number", value=5, min=1, max=10, step = 1),
+checkboxInput(inputId="checkbox", label = "Check or uncheck", value = F),
+checkboxGroupInput(inputId="checkbox", label = "Check or uncheck (Group)", choices = c("Choice1", "Choice2", "Choice3")),
+selectInput(inputId = "select", label = "Select (multiple)", choices = c("Choice1", "Choice2", "Choice3"), multiple = T),
+selectInput(inputId = "select", label = "Select", choices = c("Choice1", "Choice2", "Choice3"), multiple = F),
+sliderInput(inputId = "slider", label = "Select a number", min = 1, max = 11, value = 5, step = 1),
+radioButtons(inputId = "radio", label = "Select one (radio)", choices = c("Choice1", "Choice2", "Choice3")),
+dateInput(inputId = "date", label = "Select a date", value = "2019-01-01"),
+dateRangeInput(inputId = "dateRange", label = "Select a range", start = "2019-01-01", end = "2019-01-31")
+
+outputs - ui.R
+    #verbatimTextOutput("text1"),
+    
+    #tableOutput("table1"),
+    
+
+  DTOutput(outputId = "datatable1"),
+  plotOutput("plot1")
+
+outputs - server.R
+# library(ggplot2)
+library(DT)
+
+function(input, output){
+  data("mtcars")
+  mtcars$cyl <- as.factor(mtcars$cyl)
+  
+  output$datatable1 <- renderDT(datatable(mtcars))
+  
+  output$plot1 <- renderPlot({
+    ggplot(data = mtcars, aes(x = wt, y = mpg, color = cyl)) + geom_point()
+  })
+  
+  #output$table1 <- renderTable(mtcars)
+  
+
+  
+  output$dt1 <- renderDT({
+    datatable(mtcars, options = list(pageLength = 5,
+                                     lengthMenu = c(5,10,15,20)
+                                     )
+              )
+  })
+  
+}
+
+
+downloads..packages
+
+install.packages("ggplot2")
+ggplot2
+DT
+leaflet
